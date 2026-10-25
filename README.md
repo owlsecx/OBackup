@@ -18,20 +18,18 @@
 
 ## 📌 Overview
 
-Offline backup configuration & exposure auditor
+OBackup is an offline, read-only auditor for backup configuration and exposed backup artifacts across a wide range of tools (restic, borg, duplicity, bacula/bareos, amanda, rsnapshot, timeshift, deja-dup, duplicati, rclone, cron and systemd timers). It flags unencrypted destinations, plaintext credentials, weak permissions, missing rotation and cleartext transports, and scans directories for exposed SQL dumps, config backups, key files and disk images. Findings map to CWE and MITRE ATT&CK with remediation and a 0–100 risk score, and it never modifies or deletes backups.
 
 ---
 
 ## ✨ Features
 
-- Tolerant offline parsers for restic, borg/borgmatic, duplicity/duply, bacula & bareos, amanda, rsnapshot, timeshift, deja-dup (dconf dump), duplicati exports, rclone.conf, systemd .service/.timer, crontab lines and ad-hoc rsync / tar / mysqldump / pg_dump scripts
-- Ruleset: unencrypted destinations, plaintext creds, weak store permissions, no rotation / infinite retention, secrets backed up without exclusion, missing encryption flags, same-filesystem targets, cleartext transports (ftp://, rsync://, http://)
-- Exposed-artifact scanner: SQL dumps, .bak/.old/.orig copies of configs, SQLite/DB dumps, tarballs of /etc or /home, shadow copies, git bundles, VM disk images, private keys / .env / wallets, credential files
-- Magic-byte sniffing + safe archive member listing
-- CWE + MITRE ATT&CK (T1005 / T1530 / T1552 ...) map, severity, remediation per finding, risk score 0-100
-- Exports: TXT / Markdown / JSON / CSV / SARIF 2.1.0
-- CI gates (--min-severity, --fail-on), --demo self-test
-- Strictly read-only: never modifies or deletes backups
+- Tolerant parsers for restic, borg, duplicity, bacula/bareos, rclone, cron and more
+- Detects unencrypted destinations, plaintext creds, weak permissions and no rotation
+- Exposed-artifact scanner for SQL dumps, .bak/.old configs, key files and VM images
+- Magic-byte sniffing and safe archive member listing
+- CWE + MITRE ATT&CK (T1005/T1530/T1552) mapping with per-finding remediation
+- Export TXT/MD/JSON/CSV/SARIF with CI gates; strictly read-only
 
 ---
 
@@ -45,7 +43,10 @@ Offline backup configuration & exposure auditor
 ## 🚀 Usage
 
 ```bash
-./OBackup
+./OBackup --scan quick
+./OBackup --config /etc/restic/ --scan-artifacts /var/backups --fail-on high
+./OBackup --root /mnt/image --scan full --format json -o report.json
+./OBackup --help
 ```
 
 ---
